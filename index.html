@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -6,12 +6,13 @@
 <title>Visão Operacional de Leitos</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="dados.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{--bg:#0a0e17;--card:#111827;--surf:#1e293b;--brd:#1e293b;--brd2:#334155;--t1:#f1f5f9;--t2:#94a3b8;--t3:#64748b;--red:#ef4444;--redD:rgba(239,68,68,.15);--org:#f59e0b;--orgD:rgba(245,158,11,.15);--grn:#10b981;--grnD:rgba(16,185,129,.15);--blu:#3b82f6;--bluD:rgba(59,130,246,.15);--pur:#8b5cf6;--purD:rgba(139,92,246,.15);--cyn:#06b6d4;--cynD:rgba(6,182,212,.15);--r:12px;--rs:8px}
 *{margin:0;padding:0;box-sizing:border-box}body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t1);min-height:100vh}
 .hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;border-bottom:1px solid var(--brd);background:linear-gradient(180deg,rgba(17,24,39,.95),var(--bg));position:sticky;top:0;z-index:100;backdrop-filter:blur(20px)}
 .hdr-l{display:flex;align-items:center;gap:14px}
-.logo-img{height:48px;width:auto}
+.logo-img{height:60px;width:auto;object-fit:contain;margin-right:10px}
 .hdr-t{font-size:17px;font-weight:600}.hdr-s{font-size:11px;color:var(--t3);margin-top:1px}
 .hdr-r{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--t2)}
 .dot{width:8px;height:8px;background:var(--grn);border-radius:50%;animation:p 2s infinite}@keyframes p{0%,100%{opacity:1}50%{opacity:.4}}
@@ -53,11 +54,56 @@ table.dt{width:100%;border-collapse:collapse;font-size:12px}.dt th{text-align:le
 .hl{color:var(--org)}.hl2{color:var(--cyn)}.hl3{color:var(--red)}
 @media(max-width:1024px){.g2,.g31{grid-template-columns:1fr}.mn{padding:14px}.hdr,.nav,.fb{padding-left:14px;padding-right:14px}.br{grid-template-columns:140px 1fr 50px}}
 @media(max-width:768px){.cr{grid-template-columns:repeat(2,1fr)}.kv{font-size:20px}}
+/* Login Lock Screen */
+#ls-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 14, 23, 0.95); z-index: 9999; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(15px); transition: opacity 0.4s ease; }
+.ls-card { background: var(--card); border: 1px solid var(--brd); border-radius: 16px; padding: 40px 30px; width: 100%; max-width: 360px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); text-align: center; }
+.ls-logo { height: 75px; margin-bottom: 24px; object-fit: contain; }
+.ls-title { font-size: 20px; font-weight: 700; color: var(--t1); margin-bottom: 4px; }
+.ls-sub { font-size: 12px; color: var(--t3); margin-bottom: 24px; letter-spacing: 0.5px; }
+.ls-fld { margin-bottom: 14px; text-align: left; }
+.ls-inp { width: 100%; padding: 12px 16px; background: var(--bg); border: 1px solid var(--brd2); border-radius: var(--rs); color: var(--t1); font-size: 13px; font-family: inherit; transition: all 0.2s; }
+.ls-inp:focus { outline: none; border-color: var(--blu); box-shadow: 0 0 0 3px var(--bluD); }
+.ls-err { font-size: 11px; color: var(--red); padding: 8px; background: var(--redD); border-radius: var(--rs); margin-bottom: 14px; display: none; }
+.ls-btn { width: 100%; padding: 12px; background: var(--blu); color: #fff; border: none; border-radius: var(--rs); font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+.ls-btn:hover { background: #2563eb; transform: translateY(-1px); }
+
+/* Modal Log Acesso */
+.log-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+.log-box { background: var(--card); border: 1px solid var(--brd); border-radius: var(--r); width: 90%; max-width: 500px; max-height: 80vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+.log-hdr { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid var(--brd); }
+.log-tit { font-size: 15px; font-weight: 600; font-family: 'DM Sans', sans-serif;}
+.log-cls { background: 0; border: 0; color: var(--t3); font-size: 18px; cursor: pointer; }
+.log-cls:hover { color: var(--t1); }
+.log-bdy { padding: 0; overflow-y: auto; flex: 1; }
 </style>
 </head>
 <body>
+<div id="ls-overlay">
+  <div class="ls-card">
+    <img src="logo_branco.png" class="ls-logo" id="ls-img">
+    <div class="ls-title">Visão de Leitos</div>
+    <div class="ls-sub">Acesso protegido por autenticação</div>
+    <div class="ls-err" id="ls-err">Credenciais inválidas.</div>
+    <div class="ls-fld"><input type="text" id="ls-usr" class="ls-inp" placeholder="Usuário Admin"></div>
+    <div class="ls-fld"><input type="password" id="ls-pwd" class="ls-inp" placeholder="Senha de Acesso" onkeyup="if(event.key==='Enter') fLog()"></div>
+    <button class="ls-btn" onclick="fLog()">Entrar no Dashboard</button>
+  </div>
+</div>
+
+<div class="log-modal" id="mod-log">
+  <div class="log-box">
+    <div class="log-hdr"><span class="log-tit">📋 Histórico de Acessos</span><button class="log-cls" onclick="document.getElementById('mod-log').style.display='none'">✕</button></div>
+    <div class="log-bdy" style="padding:0">
+       <table class="dt" id="log-tb">
+         <thead><tr><th>Data / Hora</th><th class="ct">Endereço IP</th></tr></thead>
+         <tbody id="log-list"></tbody>
+       </table>
+    </div>
+  </div>
+</div>
+
 <header class="hdr">
-  <div class="hdr-l"><img src="data:image/png;base64,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" class="logo-img" alt="HAC"><div><div class="hdr-t">Visão Operacional de Leitos</div><div class="hdr-s">Hospital Ana Costa</div></div></div>
+  <div class="hdr-l"><img src="logo_branco.png" class="logo-img" alt="HAC"><div><div class="hdr-t">Visão Operacional de Leitos</div><div class="hdr-s">Hospital Ana Costa</div></div></div>
   <div class="hdr-r"><div class="dot"></div><span id="ha"></span></div>
 </header>
 <nav class="nav">
@@ -66,6 +112,8 @@ table.dt{width:100%;border-collapse:collapse;font-size:12px}.dt th{text-align:le
   <button class="nb" onclick="sp('p3',this)">⚡ Eficiência</button>
   <button class="nb" onclick="sp('p4',this)">🔍 Desperdício</button>
   <button class="nb" onclick="sp('p5',this)">🔧 Manutenção</button>
+  <button class="nb" style="margin-left:auto;border:1px solid var(--brd2)" onclick="openLogs()"><span style="font-family:'JetBrains Mono',monospace">🔒</span> Log Acesso</button>
+  <button class="nb" style="margin-left:8px;border:1px solid rgba(239, 68, 68, 0.4);color:var(--redD);color:var(--red)" onclick="fExit()">🚪 Sair</button>
 </nav>
 <div class="fb">
   <div class="fg"><span class="fl">Período</span><select id="fm" class="fs" onchange="fc()"></select></div>
@@ -144,22 +192,69 @@ x.font='9px JetBrains Mono';x.textAlign='center';data.forEach((d,i)=>{x.beginPat
 const iMx=v.indexOf(Math.max(...v)),iMn=v.indexOf(Math.min(...v));
 [[iMx,'#ef4444',-14],[iMn,'#10b981',18]].forEach(([i,c,o])=>{x.beginPath();x.arc(xs(i),ys(v[i]),5,0,Math.PI*2);x.fillStyle=c;x.fill();x.strokeStyle='#0a0e17';x.lineWidth=2;x.stroke();x.fillStyle=c;x.font='bold 10px JetBrains Mono';x.fillText(fm(v[i])+'%',xs(i),ys(v[i])+o)})}
 
-// P2 CAPACIDADE
+// P2 CAPACIDADE — PAINEL DE DECISAO
 function r2(){const s=gS(),k=gK();if(!s.length){document.getElementById('p2').innerHTML='<p style="color:var(--t3);padding:40px">Sem dados.</p>';return}
-const sup=s.filter(x=>x.pct_ocupacao_oficial>=100),cvS=[...s].sort((a,b)=>b.cv_pct-a.cv_pct),mCV=cvS[0]?.cv_pct||1;
-let h='<div class="ib">📘 <strong>O que é CV% (Coeficiente de Variação)?</strong><br>Mede a <strong>instabilidade</strong> da ocupação diária. Quanto maior, mais o setor oscila entre dias cheios e dias vazios.<br><strong>CV &lt;10%</strong> = estável e previsível &nbsp;|&nbsp; <strong>10-20%</strong> = variação moderada &nbsp;|&nbsp; <strong>&gt;25%</strong> = altamente imprevisível.<br>Exemplo: setor com 95% de média e CV 25% parece lotado, mas tem vários dias com leitos sobrando.</div>'
-+'<div class="cr"><div class="kc blu"><div class="kl">Ocupação Oficial</div><div class="kv" style="color:var(--blu)">'+fm(k.ocupacao_oficial_pct)+'%</div></div>'
-+'<div class="kc pur"><div class="kl">Setores >100%</div><div class="kv" style="color:var(--pur)">'+sup.length+'</div><div class="ks">'+(sup.map(x=>x.setor).join(', ')||'nenhum')+'</div></div>'
-+'<div class="kc org"><div class="kl">Maior CV%</div><div class="kv" style="color:var(--org)">'+fm(cvS[0]?.cv_pct||0)+'%</div><div class="ks">'+(cvS[0]?.setor||'')+'</div></div></div>'
-+'<div class="g2"><div class="pn"><div class="ph"><div class="pt">📉 CV% — Ranking de Instabilidade</div></div><div class="pp"><div class="bc">'
-+cvS.map(x=>'<div class="br"><div class="bl">'+x.setor+'</div><div class="bt"><div class="bf '+brc(x.cv_pct,mCV)+'" style="width:'+(x.cv_pct/mCV*100).toFixed(0)+'%"></div></div><div class="bv">'+fm(x.cv_pct)+'%</div></div>').join('')
-+'</div></div></div><div class="pn"><div class="ph"><div class="pt">💡 Insights</div></div><div class="pp" id="ic"></div></div></div>';
+const sorted=[...s].sort((a,b)=>b.pct_ocupacao_oficial-a.pct_ocupacao_oficial);
+const crit=s.filter(x=>x.pct_ocupacao_oficial>=95);
+const folga=s.filter(x=>x.pct_ocupacao_oficial<80);
+const tOfic=s.reduce((a,b)=>a+b.oficiais,0);
+const tOcup=s.reduce((a,b)=>a+Math.round(b.media_ocupados),0);
+const tLivr=Math.max(0,tOfic-tOcup);
+
+let h='<div class="cr" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr))">'
++'<div class="kc red"><div class="kl">Ocupação Geral</div><div class="kv" style="color:var(--red)">'+fm(k.ocupacao_oficial_pct)+'%</div><div class="ks">'+tOfic+' leitos oficiais</div><div class="ki">🏥</div></div>'
++'<div class="kc blu"><div class="kl">Leitos Ocupados</div><div class="kv" style="color:var(--blu)">'+tOcup+'</div><div class="ks">média/dia</div><div class="ki">🛏️</div></div>'
++'<div class="kc grn"><div class="kl">Leitos Livres</div><div class="kv" style="color:var(--grn)">'+tLivr+'</div><div class="ks">disponíveis</div><div class="ki">✅</div></div>'
++'<div class="kc org"><div class="kl">Setores Críticos</div><div class="kv" style="color:var(--org)">'+crit.length+'</div><div class="ks">≥95% ocupação</div><div class="ki">⚠️</div></div>'
++'<div class="kc cyn"><div class="kl">Setores com Folga</div><div class="kv" style="color:var(--cyn)">'+folga.length+'</div><div class="ks">&lt;80% ocupação</div><div class="ki">🟢</div></div></div>'
+
+// TABELA DE DECISAO
++'<div class="pn fw"><div class="ph"><div class="pt">📋 Painel de Decisão por Setor</div><div class="pb">ordenado por criticidade</div></div>'
++'<div class="pp" style="padding:0;overflow-x:auto"><table class="dt"><thead><tr>'
++'<th>Setor</th>'
++'<th class="ct">Oficiais</th>'
++'<th class="ct">Ocupados</th>'
++'<th class="ct" style="color:var(--grn)">Livres</th>'
++'<th class="ct">% Ocup.</th>'
++'<th class="ct">Amplitude</th>'
++'<th class="ct">Status</th>'
++'</tr></thead><tbody>'
++sorted.map(x=>{
+  const livres=Math.max(0,x.oficiais-Math.round(x.media_ocupados));
+  const pct=x.pct_ocupacao_oficial;
+  const st=pct>=100?'🔴 Superlotado':pct>=95?'🟠 Crítico':pct>=80?'🟡 Atenção':'🟢 Confortável';
+  const cls=pct>=100?'cr2':pct>=95?'wr':pct>=80?'in':'gd';
+  return '<tr><td><strong>'+x.setor+'</strong></td>'
+  +'<td class="ct m">'+x.oficiais+'</td>'
+  +'<td class="ct m">'+Math.round(x.media_ocupados)+'</td>'
+  +'<td class="ct m" style="color:var(--grn);font-weight:700">'+livres+'</td>'
+  +'<td class="ct"><span class="bd '+cls+'">'+fm(pct)+'%</span></td>'
+  +'<td class="ct m" style="color:var(--t3)">'+x.min_ocupados+'–'+x.max_ocupados+'</td>'
+  +'<td class="ct" style="font-size:11px">'+st+'</td></tr>'
+}).join('')
++'</tbody></table></div></div>'
+
+// MAPA DE ACAO
++'<div class="g2"><div class="pn"><div class="ph"><div class="pt">🚨 Mapa de Ação</div></div><div class="pp" id="act-map"></div></div>'
++'<div class="pn"><div class="ph"><div class="pt">📊 Ocupação vs Capacidade</div></div><div class="pp"><div class="bc">'
++sorted.map(x=>{
+  const pct=Math.min(x.pct_ocupacao_oficial,120);
+  const cls=x.pct_ocupacao_oficial>=100?'red':x.pct_ocupacao_oficial>=95?'org':x.pct_ocupacao_oficial>=80?'blu':'grn';
+  return '<div class="br"><div class="bl">'+x.setor+'</div><div class="bt"><div class="bf '+cls+'" style="width:'+Math.min(pct/120*100,100).toFixed(0)+'%"></div></div><div class="bv">'+fm(x.pct_ocupacao_oficial)+'%</div></div>'
+}).join('')
++'</div></div></div></div>';
+
 document.getElementById('p2').innerHTML=h;
-const ins=[];const lt=s.filter(x=>x.pct_ocupacao_oficial>=100&&x.cv_pct<10);if(lt.length)ins.push({c:'var(--red)',b:'var(--redD)',t:'Superlotação Consistente',x:lt.map(x=>x.setor).join(', ')+' — acima de 100% com baixa variação.'});
-const it=s.filter(x=>x.cv_pct>25);if(it.length)ins.push({c:'var(--org)',b:'var(--orgD)',t:'Alta Instabilidade',x:it.map(x=>x.setor).join(', ')+' — CV >25%, oscilam muito.'});
-const pr=s.filter(x=>x.pct_ocupacao_oficial>=95&&x.cv_pct>12);if(pr.length)ins.push({c:'var(--blu)',b:'var(--bluD)',t:'Paradoxo Média Alta + Variação',x:pr.map(x=>x.setor).join(', ')+': parecem lotados na média, mas têm dias com folga.'});
-const es=s.filter(x=>x.cv_pct<10&&x.pct_ocupacao_oficial<90);if(es.length)ins.push({c:'var(--grn)',b:'var(--grnD)',t:'Operação Estável',x:es.map(x=>x.setor).join(', ')+' — previsíveis, candidatos para overflow.'});
-document.getElementById('ic').innerHTML=ins.map(i=>'<div class="ins" style="background:'+i.b+';border-color:'+i.c+'"><div class="ins-t">'+i.t+'</div><div class="ins-x">'+i.x+'</div></div>').join('')||'<p style="color:var(--t3)">Sem insights.</p>'}
+
+// Preencher mapa de acao
+const acts=[];
+const lotados=s.filter(x=>x.pct_ocupacao_oficial>=95).sort((a,b)=>b.pct_ocupacao_oficial-a.pct_ocupacao_oficial);
+if(lotados.length) acts.push({c:'var(--red)',b:'var(--redD)',t:'🔴 Precisam de leito agora (≥95%)',x:lotados.map(x=>x.setor+' ('+fm(x.pct_ocupacao_oficial)+'%)').join(' · ')});
+const monit=s.filter(x=>x.pct_ocupacao_oficial>=80&&x.pct_ocupacao_oficial<95).sort((a,b)=>b.pct_ocupacao_oficial-a.pct_ocupacao_oficial);
+if(monit.length) acts.push({c:'var(--org)',b:'var(--orgD)',t:'🟡 Monitorar (80–95%)',x:monit.map(x=>x.setor+' ('+fm(x.pct_ocupacao_oficial)+'%)').join(' · ')});
+const ovflow=s.filter(x=>x.pct_ocupacao_oficial<80).sort((a,b)=>a.pct_ocupacao_oficial-b.pct_ocupacao_oficial);
+if(ovflow.length) acts.push({c:'var(--grn)',b:'var(--grnD)',t:'🟢 Podem receber overflow (<80%)',x:ovflow.map(x=>{const l=Math.max(0,x.oficiais-Math.round(x.media_ocupados));return x.setor+' ('+l+' livres)'}).join(' · ')});
+document.getElementById('act-map').innerHTML=acts.map(i=>'<div class="ins" style="background:'+i.b+';border-color:'+i.c+'"><div class="ins-t">'+i.t+'</div><div class="ins-x">'+i.x+'</div></div>').join('')||'<p style="color:var(--t3)">Operação normal.</p>'}
 
 // P3 EFICIENCIA — TABELA UNICA
 function r3(){const s=gS(),p=gP();if(!s.length){document.getElementById('p3').innerHTML='<p style="color:var(--t3);padding:40px">Sem dados.</p>';return}
@@ -191,21 +286,82 @@ let h='<div class="cr" style="grid-template-columns:repeat(5,1fr)">'
 +'</tbody></table></div></div>';
 document.getElementById('p3').innerHTML=h}
 
-// P4 DESPERDICIO
+// P4 DESPERDICIO — REDESIGN INTUITIVO
 function r4(){const s=gS();if(!s.length){document.getElementById('p4').innerHTML='<p style="color:var(--t3);padding:40px">Sem dados.</p>';return}
-const dS=[...s].sort((a,b)=>b.desp_ociosidade_dias-a.desp_ociosidade_dias);const aS=[...s].sort((a,b)=>b.alertas_24h-a.alertas_24h);
-const mD=dS[0]?.desp_ociosidade_dias||1,mA=aS[0]?.alertas_24h||1;
-const tD=s.reduce((a,b)=>a+b.desp_ociosidade_dias,0),tA=s.reduce((a,b)=>a+b.alertas_24h,0),tI=s.reduce((a,b)=>a+b.qtd_interditados_dias,0);
-let h='<div class="ib">📘 <strong>Glossário</strong><br><br><strong>Ociosidade (leito-dias)</strong> — Horas com status LIBERADO (pronto, sem paciente) convertidas em dias. Representa capacidade não utilizada.<br><br><strong>Alertas >24h</strong> — Vezes que um leito ficou LIBERADO por mais de 24h seguidas sem uso. Casos mais críticos de ociosidade. <em>Setores com ocupação acima de 100% não contam alertas, pois leitos extras só existem por demanda.</em></div>'
-+'<div class="cr"><div class="kc red"><div class="kl">Desperdício Total</div><div class="kv" style="color:var(--red)">'+Math.round(tD)+'</div><div class="ks">leito-dias</div><div class="ki">📉</div></div>'
-+'<div class="kc org"><div class="kl">Alertas >24h</div><div class="kv" style="color:var(--org)">'+tA+'</div><div class="ks">ocorrências</div><div class="ki">⏰</div></div>'
-+'<div class="kc pur"><div class="kl">Interditados</div><div class="kv" style="color:var(--pur)">'+Math.round(tI)+'</div><div class="ks">leito-dias</div><div class="ki">🔧</div></div></div>'
-+'<div class="g2"><div class="pn"><div class="ph"><div class="pt">📊 Ociosidade (leito-dias)</div><div class="pb">LIBERADO sem uso</div></div><div class="pp"><div class="bc">'
-+dS.map(x=>'<div class="br"><div class="bl">'+x.setor+'</div><div class="bt"><div class="bf '+brc(x.desp_ociosidade_dias,mD)+'" style="width:'+(x.desp_ociosidade_dias/(mD||1)*100).toFixed(0)+'%"></div></div><div class="bv">'+fm(x.desp_ociosidade_dias,0)+'</div></div>').join('')
-+'</div></div></div><div class="pn"><div class="ph"><div class="pt">⚡ Alertas >24h</div><div class="pb">LIBERADO >24h seguidas</div></div><div class="pp"><div class="bc">'
-+aS.filter(x=>x.alertas_24h>0).map(x=>'<div class="br"><div class="bl">'+x.setor+'</div><div class="bt"><div class="bf '+brc(x.alertas_24h,mA)+'" style="width:'+(x.alertas_24h/(mA||1)*100).toFixed(0)+'%"></div></div><div class="bv">'+x.alertas_24h+'</div></div>').join('')
+const tD=s.reduce((a,b)=>a+b.desp_ociosidade_dias,0);
+const tH=s.reduce((a,b)=>a+b.desp_ociosidade_horas,0);
+const tA=s.reduce((a,b)=>a+b.alertas_24h,0);
+const tI=s.reduce((a,b)=>a+b.qtd_interditados_dias,0);
+const tOfic=s.reduce((a,b)=>a+b.oficiais,0);
+const pctDesp=tOfic>0?((tD/30)/tOfic*100):0;
+const sorted=[...s].sort((a,b)=>(b.desp_ociosidade_dias+b.alertas_24h*2)-(a.desp_ociosidade_dias+a.alertas_24h*2));
+const top3=sorted.slice(0,3).filter(x=>x.desp_ociosidade_dias>0);
+
+let h='<div class="ib" style="border-left:3px solid var(--org);background:var(--orgD)">💡 <strong>O que esta aba mostra?</strong> — Leitos que ficaram <strong>prontos e vazios</strong> (liberados sem paciente). Quanto maior o número, mais oportunidade perdida de internar pacientes.</div>'
+
+// KPIs
++'<div class="cr" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr))">'
++'<div class="kc red"><div class="kl">Horas Desperdiçadas</div><div class="kv" style="color:var(--red)">'+Math.round(tH).toLocaleString()+'h</div><div class="ks">leitos prontos sem uso</div><div class="ki">⏱️</div></div>'
++'<div class="kc org"><div class="kl">Equivale a</div><div class="kv" style="color:var(--org)">'+Math.round(tD)+'</div><div class="ks">leito-dias perdidos</div><div class="ki">📉</div></div>'
++'<div class="kc pur"><div class="kl">Taxa de Ociosidade</div><div class="kv" style="color:var(--pur)">'+fm(pctDesp)+'%</div><div class="ks">da capacidade total</div><div class="ki">📊</div></div>'
++'<div class="kc cyn"><div class="kl">Alertas Graves</div><div class="kv" style="color:var(--cyn)">'+tA+'</div><div class="ks">leitos vazios >24h seguidas</div><div class="ki">🔔</div></div>'
++'<div class="kc blu"><div class="kl">Interditados</div><div class="kv" style="color:var(--blu)">'+Math.round(tI)+'</div><div class="ks">leito-dias fora de uso</div><div class="ki">🚫</div></div></div>'
+
+// TABELA DETALHADA
++'<div class="pn fw"><div class="ph"><div class="pt">📋 Detalhamento por Setor</div><div class="pb">ordenado por impacto</div></div>'
++'<div class="pp" style="padding:0;overflow-x:auto"><table class="dt"><thead><tr>'
++'<th>Setor</th>'
++'<th class="ct">Leitos</th>'
++'<th class="ct" style="color:var(--red)">Horas Ociosas</th>'
++'<th class="ct" style="color:var(--org)">Dias Perdidos</th>'
++'<th class="ct" style="color:var(--cyn)">Alertas >24h</th>'
++'<th class="ct">Gravidade</th>'
++'</tr></thead><tbody>'
++sorted.map(x=>{
+  const score=x.desp_ociosidade_dias+x.alertas_24h*2;
+  const maxScore=sorted[0]?(sorted[0].desp_ociosidade_dias+sorted[0].alertas_24h*2):1;
+  const pctBar=Math.min((score/(maxScore||1))*100,100);
+  const gCls=pctBar>=60?'cr2':pctBar>=30?'wr':'gd';
+  const gTxt=pctBar>=60?'Alto':pctBar>=30?'Médio':'Baixo';
+  return '<tr><td><strong>'+x.setor+'</strong></td>'
+  +'<td class="ct m">'+x.oficiais+'</td>'
+  +'<td class="ct m" style="color:var(--red)">'+Math.round(x.desp_ociosidade_horas)+'h</td>'
+  +'<td class="ct m" style="color:var(--org)">'+fm(x.desp_ociosidade_dias,0)+'</td>'
+  +'<td class="ct"><span class="bd '+(x.alertas_24h>5?'cr2':x.alertas_24h>0?'wr':'gd')+'">'+x.alertas_24h+'</span></td>'
+  +'<td class="ct"><span class="bd '+gCls+'">'+gTxt+'</span></td></tr>'
+}).join('')
++'</tbody></table></div></div>'
+
+// FOCO + BARRAS
++'<div class="g2">'
++'<div class="pn"><div class="ph"><div class="pt">🎯 Onde Focar?</div></div><div class="pp" id="desp-foco"></div></div>'
++'<div class="pn"><div class="ph"><div class="pt">📊 Ranking de Ociosidade</div><div class="pb">horas sem uso</div></div><div class="pp"><div class="bc">'
++sorted.filter(x=>x.desp_ociosidade_horas>0).map(x=>{
+  const mx=sorted[0]?.desp_ociosidade_horas||1;
+  const cls=x.desp_ociosidade_horas/mx>.6?'red':x.desp_ociosidade_horas/mx>.3?'org':'cyn';
+  return '<div class="br"><div class="bl">'+x.setor+'</div><div class="bt"><div class="bf '+cls+'" style="width:'+(x.desp_ociosidade_horas/mx*100).toFixed(0)+'%"></div></div><div class="bv">'+Math.round(x.desp_ociosidade_horas)+'h</div></div>'
+}).join('')
 +'</div></div></div></div>';
-document.getElementById('p4').innerHTML=h}
+
+document.getElementById('p4').innerHTML=h;
+
+// ONDE FOCAR
+const focos=[];
+if(top3.length){
+  focos.push({c:'var(--red)',b:'var(--redD)',t:'🔴 Maiores desperdícios',x:'Os setores '+top3.map(x=>x.setor).join(', ')+' concentram '+(fm(top3.reduce((a,b)=>a+b.desp_ociosidade_dias,0)/tD*100,0))+'% de toda a ociosidade. Ação prioritária.'});
+}
+const alertaGrave=s.filter(x=>x.alertas_24h>=5).sort((a,b)=>b.alertas_24h-a.alertas_24h);
+if(alertaGrave.length){
+  focos.push({c:'var(--org)',b:'var(--orgD)',t:'🟠 Leitos esquecidos (>24h vazios)',x:alertaGrave.map(x=>x.setor+' ('+x.alertas_24h+'×)').join(', ')+' — Investigar por que não foram preenchidos. Pode haver problema de fluxo ou comunicação.'});
+}
+if(tI>0){
+  focos.push({c:'var(--pur)',b:'var(--purD)',t:'🟣 Interditados acumularam '+Math.round(tI)+' leito-dias',x:'Leitos em manutenção também representam capacidade perdida. Verificar se há pendências que podem ser aceleradas.'});
+}
+const efic=s.filter(x=>x.desp_ociosidade_dias===0&&x.alertas_24h===0);
+if(efic.length){
+  focos.push({c:'var(--grn)',b:'var(--grnD)',t:'🟢 Setores eficientes (zero desperdício)',x:efic.map(x=>x.setor).join(', ')+' — Referência de bom aproveitamento de leitos.'});
+}
+document.getElementById('desp-foco').innerHTML=focos.length?focos.map(i=>'<div class="ins" style="background:'+i.b+';border-color:'+i.c+'"><div class="ins-t">'+i.t+'</div><div class="ins-x">'+i.x+'</div></div>').join(''):'<p style="color:var(--t3)">Sem alertas de desperdício.</p>'}
 
 // P5 MANUTENCAO
 function r5(){const d=D(),mt=d.manutencao,cs=mt.categorias,ss=mt.por_setor;const mS=ss[0]?.total||1;
@@ -230,6 +386,72 @@ if(vl&&vl.media_mais24h_h)ins.push({c:'var(--red)',b:'var(--redD)',t:'Vilão: '+
 const rp=cs.filter(c=>c.mais24h===0&&c.total>1);if(rp.length)ins.push({c:'var(--grn)',b:'var(--grnD)',t:'Sempre Resolve no Dia',x:rp.map(c=>c.categoria).join(', ')+' — 100% resolvidos em <24h.'});
 if(ss[0])ins.push({c:'var(--org)',b:'var(--orgD)',t:'Setor Crítico: '+ss[0].setor,x:'Concentra '+ss[0].total+' manutenções ('+(ss[0].total/mt.total*100).toFixed(0)+'%). '+ss[0].mais24h+' demoram >24h.'});
 document.getElementById('mi').innerHTML=ins.map(i=>'<div class="ins" style="background:'+i.b+';border-color:'+i.c+'"><div class="ins-t">'+i.t+'</div><div class="ins-x">'+i.x+'</div></div>').join('')}
+
+const S_URL = 'https://wvxyrfbsovsmhckhsciz.supabase.co';
+const S_KEY = 'sb_publishable_fU32dmqNjCabNr3ZS_vpuA_XqGiGUyv';
+const Supa = supabase.createClient(S_URL, S_KEY);
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.body.style.overflow = 'hidden'; 
+});
+
+async function hPwd(msg) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function fLog() {
+    const u = document.getElementById('ls-usr').value.trim();
+    const p = document.getElementById('ls-pwd').value.trim();
+    const e = document.getElementById('ls-err');
+    
+    e.style.display = 'none';
+    const hash = await hPwd(p);
+    
+    if(u === 'admin' && hash === '0a69111915e50b1c98422ff8c6c22409d321a79a39263f5ab47fce5dc06353a1') {
+        const o = document.getElementById('ls-overlay');
+        o.style.opacity = '0';
+        document.body.style.overflow = '';
+        setTimeout(() => o.style.display = 'none', 450);
+        
+        try {
+            const r = await fetch('https://api.ipify.org?format=json');
+            const d = await r.json();
+            await Supa.from('log_acesso_leitos').insert([{ ip: d.ip }]);
+        } catch(ex) { console.log('Log de IP falhou: ', ex) }
+    } else {
+        e.style.display = 'block';
+    }
+}
+
+async function openLogs() {
+    document.getElementById('mod-log').style.display = 'flex';
+    document.getElementById('log-list').innerHTML = '<tr><td colspan="2" class="ct" style="color:var(--t3);padding:20px">Carregando logs...</td></tr>';
+    
+    const { data, error } = await Supa.from('log_acesso_leitos').select('*').order('created_at', { ascending: false }).limit(50);
+    if(error || !data || !data.length) {
+        document.getElementById('log-list').innerHTML = '<tr><td colspan="2" class="ct" style="color:var(--t3);padding:20px">Nenhum log encontrado ou tabela log_acesso_leitos não existe.</td></tr>';
+        return;
+    }
+    
+    document.getElementById('log-list').innerHTML = data.map(x => {
+       const cd = new Date(x.created_at);
+       const fD = String(cd.getDate()).padStart(2,'0') + '/' + String(cd.getMonth()+1).padStart(2,'0');
+       const fH = String(cd.getHours()).padStart(2,'0') + ':' + String(cd.getMinutes()).padStart(2,'0');
+       return '<tr><td><strong>'+fD+'</strong> às '+fH+'</td><td class="ct m" style="color:var(--t2)">'+(x.ip || '---')+'</td></tr>';
+    }).join('');
+}
+
+async function fExit() {
+    document.getElementById('ls-usr').value = '';
+    document.getElementById('ls-pwd').value = '';
+    const e = document.getElementById('ls-err');
+    if(e) e.style.display = 'none';
+    const o = document.getElementById('ls-overlay');
+    o.style.display = 'flex';
+    setTimeout(() => o.style.opacity = '1', 10);
+    document.body.style.overflow = 'hidden';
+}
 
 if(F){document.getElementById('ha').textContent='Atualizado: '+F.atualizado_em;iF();fc()}
 </script>
