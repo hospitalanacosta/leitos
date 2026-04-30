@@ -1,6 +1,6 @@
-// Gerado em 30/04/2026 15:50
+// Gerado em 30/04/2026 15:56
 const DADOS = {
-  "atualizado_em": "30/04/2026 15:50",
+  "atualizado_em": "30/04/2026 15:56",
   "meses_disponiveis": [
     {
       "chave": "2026-01",
