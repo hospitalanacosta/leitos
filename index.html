@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Visão Operacional de Leitos</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="dados.js?v=20260601193216"></script>
+<script src="dados.js?v=20260601193816"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{--bg:#0a0e17;--card:#111827;--surf:#1e293b;--brd:#1e293b;--brd2:#334155;--t1:#f1f5f9;--t2:#94a3b8;--t3:#64748b;--red:#ef4444;--redD:rgba(239,68,68,.15);--org:#f59e0b;--orgD:rgba(245,158,11,.15);--grn:#10b981;--grnD:rgba(16,185,129,.15);--blu:#3b82f6;--bluD:rgba(59,130,246,.15);--pur:#8b5cf6;--purD:rgba(139,92,246,.15);--cyn:#06b6d4;--cynD:rgba(6,182,212,.15);--r:12px;--rs:8px}
@@ -130,7 +130,7 @@ table.dt{width:100%;border-collapse:collapse;font-size:12px}.dt th{text-align:le
 </main>
 <script>
 const F=typeof DADOS!=='undefined'?DADOS:null;
-if(!F)document.body.innerHTML='<div style="color:var(--red);padding:40px;font-size:18px">dados.js?v=20260601193216 não encontrado.</div>';
+if(!F)document.body.innerHTML='<div style="color:var(--red);padding:40px;font-size:18px">dados.js?v=20260601193816 não encontrado.</div>';
 let cM=F.mes_atual,cP='oficial',cS='todos';
 function D(){return F.por_mes[cM]}
 function gS(){let s=D().setores;if(cP==='oficial')s=s.filter(x=>x.grupo==='oficial');else if(cP==='apoio')s=s.filter(x=>x.grupo==='apoio');if(cS!=='todos')s=s.filter(x=>x.setor===cS);return s}
