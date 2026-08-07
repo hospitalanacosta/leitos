@@ -1,6 +1,6 @@
-// Gerado em 07/08/2026 06:20
+// Gerado em 07/08/2026 10:20
 const DADOS = {
-  "atualizado_em": "07/08/2026 06:20",
+  "atualizado_em": "07/08/2026 10:20",
   "meses_disponiveis": [
     {
       "chave": "2026-01",
@@ -14033,17 +14033,17 @@ const DADOS = {
       },
       "oficial": {
         "kpis": {
-          "ocupacao_oficial_pct": 79.0,
+          "ocupacao_oficial_pct": 79.3,
           "leitos_oficiais": 175,
-          "media_ocupados": 138.0,
+          "media_ocupados": 139.0,
           "alertas_24h": 24,
           "interditados_dias": 4.0
         },
         "pizza": {
-          "ocupacao": 67.27,
+          "ocupacao": 67.11,
           "giro": 5.25,
-          "indisponibilidade": 0.95,
-          "disponibilidade": 26.53
+          "indisponibilidade": 0.94,
+          "disponibilidade": 26.7
         },
         "ocup_diaria": [
           {
@@ -14079,14 +14079,14 @@ const DADOS = {
           {
             "data": "2026-08-06",
             "dia": 6,
-            "ocupados": 133,
-            "pct_oficial": 76.0
+            "ocupados": 131,
+            "pct_oficial": 74.9
           },
           {
             "data": "2026-08-07",
             "dia": 7,
-            "ocupados": 130,
-            "pct_oficial": 74.3
+            "ocupados": 134,
+            "pct_oficial": 76.6
           }
         ]
       },
@@ -14099,10 +14099,10 @@ const DADOS = {
           "interditados_dias": 0
         },
         "pizza": {
-          "ocupacao": 32.94,
-          "giro": 1.05,
+          "ocupacao": 33.42,
+          "giro": 1.02,
           "indisponibilidade": 0.0,
-          "disponibilidade": 66.02
+          "disponibilidade": 65.57
         },
         "ocup_diaria": [
           {
@@ -14138,14 +14138,14 @@ const DADOS = {
           {
             "data": "2026-08-06",
             "dia": 6,
-            "ocupados": 2,
-            "pct_oficial": 15.4
+            "ocupados": 3,
+            "pct_oficial": 23.1
           },
           {
             "data": "2026-08-07",
             "dia": 7,
-            "ocupados": 2,
-            "pct_oficial": 15.4
+            "ocupados": 1,
+            "pct_oficial": 7.7
           }
         ]
       },
@@ -14155,15 +14155,15 @@ const DADOS = {
           "grupo": "oficial",
           "oficiais": 1,
           "media_ativos": 13.0,
-          "media_ocupados": 12.7,
+          "media_ocupados": 12.9,
           "min_ocupados": 12,
-          "max_ocupados": 13,
-          "pct_ocupacao_oficial": 1271.4,
-          "cv_pct": 3.8,
+          "max_ocupados": 14,
+          "pct_ocupacao_oficial": 1285.7,
+          "cv_pct": 5.4,
           "tempo_aguardando_h": 1.79,
           "tempo_higienizacao_h": 0.29,
           "tempo_preparo_total_h": 2.08,
-          "tempo_ocupado_dias": 1.05,
+          "tempo_ocupado_dias": 1.11,
           "desp_ociosidade_horas": 44.2,
           "desp_ociosidade_dias": 1.8,
           "alertas_24h": 0,
@@ -14201,8 +14201,8 @@ const DADOS = {
             },
             {
               "data": "2026-08-07",
-              "ocupados": 13,
-              "liberados": 1
+              "ocupados": 14,
+              "liberados": 0
             }
           ]
         },
@@ -14210,7 +14210,7 @@ const DADOS = {
           "setor": "MATERNIDADE 4. C",
           "grupo": "oficial",
           "oficiais": 10,
-          "media_ativos": 16.6,
+          "media_ativos": 17.0,
           "media_ocupados": 12.4,
           "min_ocupados": 10,
           "max_ocupados": 14,
@@ -14219,9 +14219,9 @@ const DADOS = {
           "tempo_aguardando_h": 0.83,
           "tempo_higienizacao_h": 0.72,
           "tempo_preparo_total_h": 1.55,
-          "tempo_ocupado_dias": 1.75,
-          "desp_ociosidade_horas": 346.5,
-          "desp_ociosidade_dias": 14.4,
+          "tempo_ocupado_dias": 1.69,
+          "desp_ociosidade_horas": 354.5,
+          "desp_ociosidade_dias": 14.8,
           "alertas_24h": 0,
           "qtd_interditados_dias": 0.0,
           "ocup_diaria": [
@@ -14253,12 +14253,12 @@ const DADOS = {
             {
               "data": "2026-08-06",
               "ocupados": 11,
-              "liberados": 1
+              "liberados": 2
             },
             {
               "data": "2026-08-07",
               "ocupados": 10,
-              "liberados": 1
+              "liberados": 3
             }
           ]
         },
@@ -14322,17 +14322,17 @@ const DADOS = {
           "setor": "UTI CARDIO",
           "grupo": "oficial",
           "oficiais": 10,
-          "media_ativos": 10.6,
-          "media_ocupados": 8.1,
+          "media_ativos": 10.4,
+          "media_ocupados": 8.0,
           "min_ocupados": 3,
           "max_ocupados": 11,
-          "pct_ocupacao_oficial": 81.4,
-          "cv_pct": 40.4,
-          "tempo_aguardando_h": 0.87,
-          "tempo_higienizacao_h": 0.5,
-          "tempo_preparo_total_h": 1.36,
-          "tempo_ocupado_dias": 2.76,
-          "desp_ociosidade_horas": 63.7,
+          "pct_ocupacao_oficial": 80.0,
+          "cv_pct": 43.9,
+          "tempo_aguardando_h": 0.99,
+          "tempo_higienizacao_h": 0.47,
+          "tempo_preparo_total_h": 1.46,
+          "tempo_ocupado_dias": 2.77,
+          "desp_ociosidade_horas": 65.6,
           "desp_ociosidade_dias": 2.7,
           "alertas_24h": 0,
           "qtd_interditados_dias": 0,
@@ -14369,7 +14369,7 @@ const DADOS = {
             },
             {
               "data": "2026-08-07",
-              "ocupados": 4,
+              "ocupados": 3,
               "liberados": 6
             }
           ]
@@ -14379,11 +14379,11 @@ const DADOS = {
           "grupo": "oficial",
           "oficiais": 10,
           "media_ativos": 12.0,
-          "media_ocupados": 7.7,
+          "media_ocupados": 7.9,
           "min_ocupados": 7,
           "max_ocupados": 9,
-          "pct_ocupacao_oficial": 77.1,
-          "cv_pct": 9.8,
+          "pct_ocupacao_oficial": 78.6,
+          "cv_pct": 11.5,
           "tempo_aguardando_h": 0.76,
           "tempo_higienizacao_h": 0.23,
           "tempo_preparo_total_h": 0.99,
@@ -14420,8 +14420,8 @@ const DADOS = {
             },
             {
               "data": "2026-08-06",
-              "ocupados": 8,
-              "liberados": 2
+              "ocupados": 9,
+              "liberados": 1
             },
             {
               "data": "2026-08-07",
@@ -14644,13 +14644,13 @@ const DADOS = {
             },
             {
               "data": "2026-08-06",
-              "ocupados": 12,
-              "liberados": 4
+              "ocupados": 11,
+              "liberados": 5
             },
             {
               "data": "2026-08-07",
-              "ocupados": 11,
-              "liberados": 6
+              "ocupados": 12,
+              "liberados": 5
             }
           ]
         },
@@ -14658,12 +14658,12 @@ const DADOS = {
           "setor": "ALA C - 3. ANDAR",
           "grupo": "oficial",
           "oficiais": 16,
-          "media_ativos": 16.1,
-          "media_ocupados": 10.9,
+          "media_ativos": 16.0,
+          "media_ocupados": 11.0,
           "min_ocupados": 6,
           "max_ocupados": 17,
-          "pct_ocupacao_oficial": 67.9,
-          "cv_pct": 34.2,
+          "pct_ocupacao_oficial": 68.8,
+          "cv_pct": 34.0,
           "tempo_aguardando_h": 0.95,
           "tempo_higienizacao_h": 1.51,
           "tempo_preparo_total_h": 2.46,
@@ -14700,13 +14700,13 @@ const DADOS = {
             },
             {
               "data": "2026-08-06",
-              "ocupados": 11,
-              "liberados": 6
+              "ocupados": 10,
+              "liberados": 5
             },
             {
               "data": "2026-08-07",
-              "ocupados": 10,
-              "liberados": 5
+              "ocupados": 12,
+              "liberados": 4
             }
           ]
         },
@@ -14715,11 +14715,11 @@ const DADOS = {
           "grupo": "oficial",
           "oficiais": 15,
           "media_ativos": 12.3,
-          "media_ocupados": 10.1,
+          "media_ocupados": 10.0,
           "min_ocupados": 9,
-          "max_ocupados": 12,
-          "pct_ocupacao_oficial": 67.6,
-          "cv_pct": 12.0,
+          "max_ocupados": 11,
+          "pct_ocupacao_oficial": 66.7,
+          "cv_pct": 10.0,
           "tempo_aguardando_h": 0.98,
           "tempo_higienizacao_h": 0.57,
           "tempo_preparo_total_h": 1.55,
@@ -14756,8 +14756,8 @@ const DADOS = {
             },
             {
               "data": "2026-08-06",
-              "ocupados": 12,
-              "liberados": 1
+              "ocupados": 11,
+              "liberados": 2
             },
             {
               "data": "2026-08-07",
@@ -14826,18 +14826,18 @@ const DADOS = {
           "setor": "ALA C - 6. ANDAR",
           "grupo": "oficial",
           "oficiais": 18,
-          "media_ativos": 14.7,
-          "media_ocupados": 9.4,
+          "media_ativos": 15.0,
+          "media_ocupados": 9.6,
           "min_ocupados": 9,
           "max_ocupados": 10,
-          "pct_ocupacao_oficial": 52.4,
-          "cv_pct": 5.7,
+          "pct_ocupacao_oficial": 53.2,
+          "cv_pct": 5.6,
           "tempo_aguardando_h": 0.76,
           "tempo_higienizacao_h": 0.6,
           "tempo_preparo_total_h": 1.37,
-          "tempo_ocupado_dias": 1.89,
-          "desp_ociosidade_horas": 141.2,
-          "desp_ociosidade_dias": 5.9,
+          "tempo_ocupado_dias": 1.79,
+          "desp_ociosidade_horas": 159.9,
+          "desp_ociosidade_dias": 6.7,
           "alertas_24h": 1,
           "qtd_interditados_dias": 0,
           "ocup_diaria": [
@@ -14869,11 +14869,11 @@ const DADOS = {
             {
               "data": "2026-08-06",
               "ocupados": 9,
-              "liberados": 5
+              "liberados": 6
             },
             {
               "data": "2026-08-07",
-              "ocupados": 9,
+              "ocupados": 10,
               "liberados": 5
             }
           ]
@@ -14882,16 +14882,16 @@ const DADOS = {
           "setor": "HOSPITAL DIA",
           "grupo": "apoio",
           "oficiais": 6,
-          "media_ativos": 3.4,
+          "media_ativos": 3.3,
           "media_ocupados": 2.6,
-          "min_ocupados": 2,
+          "min_ocupados": 1,
           "max_ocupados": 3,
           "pct_ocupacao_oficial": 42.9,
-          "cv_pct": 20.8,
-          "tempo_aguardando_h": 0.27,
-          "tempo_higienizacao_h": 0.25,
-          "tempo_preparo_total_h": 0.52,
-          "tempo_ocupado_dias": 0.31,
+          "cv_pct": 30.6,
+          "tempo_aguardando_h": 0.3,
+          "tempo_higienizacao_h": 0.2,
+          "tempo_preparo_total_h": 0.5,
+          "tempo_ocupado_dias": 0.42,
           "desp_ociosidade_horas": 154.9,
           "desp_ociosidade_dias": 6.5,
           "alertas_24h": 1,
@@ -14924,12 +14924,12 @@ const DADOS = {
             },
             {
               "data": "2026-08-06",
-              "ocupados": 2,
-              "liberados": 1
+              "ocupados": 3,
+              "liberados": 0
             },
             {
               "data": "2026-08-07",
-              "ocupados": 2,
+              "ocupados": 1,
               "liberados": 0
             }
           ]
@@ -14938,7 +14938,7 @@ const DADOS = {
           "setor": "UTI PEDIATRICA",
           "grupo": "oficial",
           "oficiais": 8,
-          "media_ativos": 7.1,
+          "media_ativos": 6.9,
           "media_ocupados": 3.1,
           "min_ocupados": 2,
           "max_ocupados": 4,
@@ -14981,12 +14981,12 @@ const DADOS = {
             {
               "data": "2026-08-06",
               "ocupados": 3,
-              "liberados": 3
+              "liberados": 2
             },
             {
               "data": "2026-08-07",
               "ocupados": 3,
-              "liberados": 2
+              "liberados": 1
             }
           ]
         },
@@ -14994,7 +14994,7 @@ const DADOS = {
           "setor": "ALA D - 4. ENDOSCOPIA",
           "grupo": "apoio",
           "oficiais": 4,
-          "media_ativos": 0.9,
+          "media_ativos": 1.7,
           "media_ocupados": 0.0,
           "min_ocupados": 0,
           "max_ocupados": 0,
@@ -15004,8 +15004,8 @@ const DADOS = {
           "tempo_higienizacao_h": 0.0,
           "tempo_preparo_total_h": 0.17,
           "tempo_ocupado_dias": 0.43,
-          "desp_ociosidade_horas": 160.1,
-          "desp_ociosidade_dias": 6.7,
+          "desp_ociosidade_horas": 216.2,
+          "desp_ociosidade_dias": 9.0,
           "alertas_24h": 0,
           "qtd_interditados_dias": 0,
           "ocup_diaria": [
@@ -15037,12 +15037,12 @@ const DADOS = {
             {
               "data": "2026-08-06",
               "ocupados": 0,
-              "liberados": 0
+              "liberados": 4
             },
             {
               "data": "2026-08-07",
               "ocupados": 0,
-              "liberados": 0
+              "liberados": 2
             }
           ]
         },
@@ -15060,8 +15060,8 @@ const DADOS = {
           "tempo_higienizacao_h": 0.0,
           "tempo_preparo_total_h": 0.18,
           "tempo_ocupado_dias": 0.28,
-          "desp_ociosidade_horas": 307.6,
-          "desp_ociosidade_dias": 12.8,
+          "desp_ociosidade_horas": 322.5,
+          "desp_ociosidade_dias": 13.4,
           "alertas_24h": 6,
           "qtd_interditados_dias": 0,
           "ocup_diaria": [
